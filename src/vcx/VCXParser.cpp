@@ -179,6 +179,6 @@ std::vector<ProjectInfo> SolutionParser::parseSolution(std::istream& is)
 
 std::vector<ProjectInfo> SolutionParser::parseSolution(const fs::path& solutionFile)
 {
-   std::fstream is(solutionFile.native());
+   std::ifstream is(solutionFile.native());
    return parseSolution(is);
 }
