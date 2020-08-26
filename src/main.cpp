@@ -120,6 +120,10 @@ int main(int argc, char** argv)
 
          os << std::endl;
 
+	 os << "include(GMGCommon)" << std::endl;
+
+	 os << std::endl;
+
          auto cmakeSrcFile = solution.basePath / pInfo.projectFile;
          cmakeSrcFile.replace_extension(".cmake");
 
