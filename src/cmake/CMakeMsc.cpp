@@ -25,9 +25,9 @@ std::string cmake::cmakeStartType(const std::string& name, vcx::ConfigurationTyp
 {
    std::string res;
    if(type == vcx::ConfigurationType::Application)
-      res = "ADD_EXECUTABLE(";
+      res = "add_executable(";
    else
-      res = "ADD_LIBRARY(";
+      res = "add_library(";
 
    res += cmake::tokenize(name);
 

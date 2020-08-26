@@ -6,7 +6,7 @@ using namespace proj2cmake;
 
 void cmake::CMakeSubDirRegistering::operator()(const boost::filesystem::path& subDir)
 {
-   mOs << "ADD_SUBDIRECTORY(" << subDir;
+   mOs << "add_subdirectory(" << subDir;
 
    if (boost::contains(subDir.string(), ".."))
    {

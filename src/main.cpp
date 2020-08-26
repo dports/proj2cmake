@@ -22,7 +22,7 @@ void writeGeneratedNote(std::ostream& os, const char* procName)
 
 void writeProject(std::ofstream& os, const vcx::Solution& solution, const ProjectsPaths& dirToProj)
 {
-   os << "PROJECT(" << solution.name << ")" << std::endl;
+   os << "project(" << solution.name << ")" << std::endl;
    os << std::endl;
 
    fs::path confFile = "cmake_conf";
@@ -123,12 +123,12 @@ int main(int argc, char** argv)
          auto cmakeSrcFile = solution.basePath / pInfo.projectFile;
          cmakeSrcFile.replace_extension(".cmake");
 
-         os << "INCLUDE(\"" + cmakeSrcFile.filename().string() + "\")" << std::endl;
+	 os << "include(\"" + cmakeSrcFile.filename().string() + "\")" << std::endl;
          os << std::endl;
          os << cmake::cmakeStartType(pInfo.name, project.type) << std::endl;
          os << "            ${" << cmake::tokenize(pInfo.name) << "_SRC})" << std::endl;
          os << std::endl;
-         os << "TARGET_LINK_LIBRARIES(" << cmake::tokenize(pInfo.name) << std::endl;
+	 os << "target_link_libraries(" << cmake::tokenize(pInfo.name) << std::endl;
          os << "            ${" << cmake::tokenize(pInfo.name) << "_DEPS}" << std::endl;
          os << "            ${" << cmake::tokenize(pInfo.name) << "_ADDITIONAL_DEPS}" << std::endl;
          os << "            ${SOLUTION_" << cmake::cmakeTypeCaption(project.type) << "_DEPS}" << std::endl;
