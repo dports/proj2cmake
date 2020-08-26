@@ -25,22 +25,22 @@ void writeProject(std::ofstream& os, const vcx::Solution& solution, const Projec
    os << "project(" << solution.name << ")" << std::endl;
    os << std::endl;
 
-   fs::path confFile = "cmake_conf";
-   confFile /= (solution.name + ".cmake");
+//   fs::path confFile = "cmake_conf";
+//   confFile /= (solution.name + ".cmake");
 
-   //os << "IF(EXISTS \"${" << solution.name << "_SOURCE_DIR}/cmake_conf/" << solution.name << ".cmake\")" << std::endl;
-   os << "INCLUDE(\"${" << solution.name << "_SOURCE_DIR}/" + confFile.string() + "\")" << std::endl;
-   //os << "ENDIF()" << std::endl;
-   os << std::endl;
+//   //os << "IF(EXISTS \"${" << solution.name << "_SOURCE_DIR}/cmake_conf/" << solution.name << ".cmake\")" << std::endl;
+//   os << "include(\"${" << solution.name << "_SOURCE_DIR}/" + confFile.string() + "\")" << std::endl;
+//   //os << "ENDIF()" << std::endl;
+//   os << std::endl;
 
-   auto fullConfPath = solution.basePath / confFile;
-   if(fs::exists(fullConfPath) == false)
-   {
-      fs::create_directories(fullConfPath.parent_path());
-      cmake::ConfigTemplateWriter writer(solution);
-      std::ofstream os(fullConfPath.native());
-      writer(os);
-   }
+//   auto fullConfPath = solution.basePath / confFile;
+//   if(fs::exists(fullConfPath) == false)
+//   {
+//      fs::create_directories(fullConfPath.parent_path());
+//      cmake::ConfigTemplateWriter writer(solution);
+//      std::ofstream os(fullConfPath.native());
+//      writer(os);
+//   }
 
    cmake::CMakeSubDirRegistering subDirRegister(os);
    for(auto&& subDir : dirToProj)
@@ -91,7 +91,7 @@ int main(int argc, char** argv)
       cmake::ListsWriter writer(p);
 
       std::ofstream os(cmakeSrcFile.native());
-      writeGeneratedNote(os, procName);
+//      writeGeneratedNote(os, procName);
       writer(os);
 
       dirToProj[cmakeSrcFile.parent_path()].push_back(&p);
