@@ -11,6 +11,12 @@ void cmake::ListsWriter::operator()(std::ostream& os)
    {
       os << "    " << f << std::endl;
    }
+
+   for(auto&& f : mProject.second.includeFiles)
+   {
+      os << "    " << f << std::endl;
+   }
+
    os << "   )" << std::endl;
    
    os << std::endl;

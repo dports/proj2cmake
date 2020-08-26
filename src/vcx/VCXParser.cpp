@@ -101,7 +101,8 @@ Project SolutionParser::parseProject(const ProjectInfo& projInfo)
          {
             auto f = ip.second.get<std::string>("<xmlattr>.Include");
             f = pathToNative(std::move(f));
-            res.includeFiles.push_back(f);
+	    res.compileFiles.push_back(f);
+//            res.includeFiles.push_back(f);
          }
          else if(ip.first == "ProjectReference")
          {
