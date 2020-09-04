@@ -83,16 +83,21 @@ int main(int argc, char** argv)
       auto&& pInfo = p.first;
       auto&& project = p.second;
 
-      if(project.compileFiles.empty())
+      size_t nFiles = project.compileFiles.size() + project.includeFiles.size();
+
+      if(nFiles == 0)
          continue;
 
       auto cmakeSrcFile = solution.basePath / pInfo.projectFile;
       cmakeSrcFile.replace_extension(".cmake");
-      cmake::ListsWriter writer(p);
 
-      std::ofstream os(cmakeSrcFile.native());
-//      writeGeneratedNote(os, procName);
-      writer(os);
+      if (nFiles > 1)
+      {
+          cmake::ListsWriter writer(p);
+
+          std::ofstream os(cmakeSrcFile.native());
+          writer(os);
+      }
 
       dirToProj[cmakeSrcFile.parent_path()].push_back(&p);
    }
@@ -101,44 +106,64 @@ int main(int argc, char** argv)
 
    for(auto&& p : dirToProj)
    {
-      auto f = p.first / "CMakeLists.txt";
-      std::ofstream os(f.native());
-      writeGeneratedNote(os, procName);
+       auto f = p.first / "CMakeLists.txt";
+       std::ofstream os(f.native());
+       //writeGeneratedNote(os, procName);
 
-      os << "cmake_minimum_required(VERSION 2.8)" << std::endl;
-      os << std::endl;
-      if(p.first == solution.basePath)
-      {
-         writeProject(os, solution, dirToProj);
-         hasProject = true;
-      }
+       os << "cmake_minimum_required(VERSION 3.14)" << std::endl;
+       os << std::endl;
+       if(p.first == solution.basePath)
+       {
+           writeProject(os, solution, dirToProj);
+           hasProject = true;
+       }
 
-      for(auto&& pr : p.second)
-      {
-         auto&& pInfo = pr->first;
-         auto&& project = pr->second;
+       for(auto&& pr : p.second)
+       {
+           auto&& pInfo = pr->first;
+           auto&& project = pr->second;
 
-         os << std::endl;
+           os << std::endl;
 
-	 os << "include(GMGCommon)" << std::endl;
+           os << "include(GMGCommon)" << std::endl;
 
-	 os << std::endl;
+           os << std::endl;
 
-         auto cmakeSrcFile = solution.basePath / pInfo.projectFile;
-         cmakeSrcFile.replace_extension(".cmake");
+           os << cmake::cmakeStartType(pInfo.name, project.type);
 
-	 os << "include(\"" + cmakeSrcFile.filename().string() + "\")" << std::endl;
-         os << std::endl;
-         os << cmake::cmakeStartType(pInfo.name, project.type) << std::endl;
-         os << "            ${" << cmake::tokenize(pInfo.name) << "_SRC})" << std::endl;
-         os << std::endl;
-	 os << "target_link_libraries(" << cmake::tokenize(pInfo.name) << std::endl;
-         os << "            ${" << cmake::tokenize(pInfo.name) << "_DEPS}" << std::endl;
-         os << "            ${" << cmake::tokenize(pInfo.name) << "_ADDITIONAL_DEPS}" << std::endl;
-         os << "            ${SOLUTION_" << cmake::cmakeTypeCaption(project.type) << "_DEPS}" << std::endl;
-         os << "            ${SOLUTION_GENERAL_DEPS})" << std::endl;
-         os << std::endl;
-      }
+           size_t nFiles = project.compileFiles.size() + project.includeFiles.size();
+
+           if (nFiles == 1)
+           {
+               for(auto&& f : project.compileFiles)
+               {
+                   os << " " << f;
+               }
+
+               for(auto&& f : project.includeFiles)
+               {
+                   os << " " << f;
+               }
+           }
+           os << ")" << std::endl;
+           os << std::endl;
+
+           if (nFiles > 1) {
+               auto cmakeSrcFile = solution.basePath / pInfo.projectFile;
+               cmakeSrcFile.replace_extension(".cmake");
+
+               os << "include(\"" + cmakeSrcFile.filename().string() + "\")" << std::endl;
+               os << std::endl;
+           }
+
+           os << "target_link_libraries(" << cmake::tokenize(pInfo.name);
+
+           for(auto&& proc : project.referencedProjects)
+           {
+               os << " " << cmake::tokenize(proc.name) << std::endl;
+           }
+           os << ")" << std::endl;
+       }
    }
 
    if (!hasProject)
