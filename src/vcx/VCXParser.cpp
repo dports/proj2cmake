@@ -126,7 +126,8 @@ Project SolutionParser::parseProject(const ProjectInfo& projInfo)
    else if(type == "Makefile")
       res.type = ConfigurationType::Makefile;
    else
-      throw std::runtime_error("Project '" + projInfo.name + "' has an invalid ConfigurationType ('" + type + "')");
+      res.type = ConfigurationType::Application;
+      //throw std::runtime_error("Project '" + projInfo.name + "' has an invalid ConfigurationType ('" + type + "')");
 
    std::cout << "  Type: " << type << ", CompileFiles: " << res.compileFiles.size() << ", IncludeFiles: " << res.includeFiles.size() << ", ProjectReferences: " << res.referencedProjects.size() << std::endl;
 
