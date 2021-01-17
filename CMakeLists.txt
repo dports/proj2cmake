@@ -2,17 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 
 project(proj2cmake)
 
+set(BOOST_ROOT "D:\\a\\proj2cmake\\proj2cmake\\boost\\boost-1.73.0-win32-msvc14.1-x86_64")
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
    ADD_DEFINITIONS(-std=c++11)
    ADD_DEFINITIONS(-Wall)
 endif()
 
-#if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-#   ADD_DEFINITIONS(-stdlib=libc++)
-#   SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -stdlib=libc++")
-#endif()
-
-FIND_PACKAGE (Boost COMPONENTS system filesystem REQUIRED)
+FIND_PACKAGE (Boost 1.73.0 COMPONENTS system filesystem REQUIRED)
 
 if (Boost_FOUND)
   include_directories(
