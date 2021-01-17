@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.19.3)
 
 project(proj2cmake)
 
@@ -9,7 +9,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR CMAKE_COMPILER_IS_GNUCXX)
    ADD_DEFINITIONS(-Wall)
 endif()
 
-FIND_PACKAGE (Boost 1.73.0 COMPONENTS system filesystem REQUIRED)
+FIND_PACKAGE (Boost 1.73.0)
 
 if (Boost_FOUND)
   include_directories(
